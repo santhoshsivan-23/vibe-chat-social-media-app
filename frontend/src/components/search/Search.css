@@ -1,0 +1,391 @@
+/* Container */
+.search-container {
+  padding: 20px;
+  min-height: 100vh;
+  background: var(--bg, #f9fafb);
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Title */
+.search-title {
+  color: #ff6600;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+/* Input */
+.search-input {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  outline: none;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+.search-input:focus {
+  border-color: #ff6600;
+  box-shadow: 0 0 6px rgba(255, 102, 0, 0.2);
+}
+
+/* Results */
+.search-results {
+  margin-top: 15px;
+}
+
+/* Empty */
+.search-empty {
+  color: #888;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Card */
+.search-card {
+  position: relative;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--border-color, #eee);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+/* Left orange accent bar */
+.search-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background: #ff6600;
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
+}
+
+.search-card:hover::before {
+  transform: scaleY(1);
+}
+
+/* Hover */
+.search-card:hover {
+  transform: translateY(-2px);
+  border-color: #ff6600;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+/* Card content layout */
+.search-card-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Avatar */
+.search-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #ff6600;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* Name */
+.search-user-name {
+  color: #222;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* User ID */
+.search-user-id {
+  color: #777;
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+/* -------------------------> */
+
+/* ================= CONTAINER ================= */
+.profile-container {
+  padding: 20px 40px;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* ================= HEADER ================= */
+.profile-name {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.profile-header-row {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.profile-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid #ff6600;
+  object-fit: cover;
+}
+
+.profile-right {
+  flex: 1;
+}
+
+.profile-userid {
+  color: #777;
+  margin-bottom: 6px;
+}
+
+.profile-description {
+  margin-bottom: 10px;
+  color: #444;
+}
+
+.add-friend-btn {
+  background: #ff6600;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.add-friend-btn:hover {
+  background: #e65c00;
+}
+
+/* ================= POSTS GRID ================= */
+.profile-posts {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.no-posts {
+  grid-column: span 4;
+  text-align: center;
+  color: #888;
+}
+
+/* ================= POST CARD ================= */
+.post-card {
+  border: 1px solid var(--border-color, #eee);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--card-bg, #ffffff);
+  transition: 0.3s;
+}
+
+.post-card:hover {
+  border-color: #ff6600;
+  transform: translateY(-3px);
+}
+
+.post-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.post-body {
+  padding: 10px;
+}
+
+.post-text {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+/* ================= ACTIONS ================= */
+.post-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.like-btn,
+.share-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.like-btn {
+  color: #ff6600;
+  font-weight: 600;
+}
+
+/* COMMENT BUTTON */
+.comment-btn {
+  width: 100%;
+  padding: 6px;
+  background: #ff6600;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 6px;
+}
+
+.comment-btn:hover {
+  background: #e65c00;
+}
+
+/* ================= MODAL ================= */
+
+/* OVERLAY */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* MODAL BOX */
+.modal-content {
+  display: flex;
+  width: 820px;
+  height: 520px;
+  background: var(--card-bg, #ffffff);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+  position: relative;
+}
+
+/* CLOSE */
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  cursor: pointer;
+  font-size: 18px;
+  z-index: 2;
+}
+
+/* LEFT IMAGE */
+.modal-image {
+  width: 50%;
+  height: 100%;
+  object-fit: cover;
+  background: #000;
+}
+
+/* RIGHT PANEL */
+.modal-right {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  padding: 18px;
+}
+
+/* TEXT */
+.modal-text {
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+/* LIKE */
+.modal-like {
+  color: #ff6600;
+  font-weight: 600;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+/* COMMENTS AREA */
+.modal-comments {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 8px;
+  margin-bottom: 10px;
+}
+
+/* SCROLLBAR */
+.modal-comments::-webkit-scrollbar {
+  width: 5px;
+}
+
+.modal-comments::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+/* COMMENT ITEM */
+.comment-item {
+  font-size: 14px;
+  margin-bottom: 8px;
+  line-height: 1.5;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.comment-item b {
+  color: #222;
+  margin-right: 4px;
+}
+
+/* INPUT AREA */
+.comment-box {
+  display: flex;
+  gap: 8px;
+  border-top: 1px solid #eee;
+  padding-top: 12px;
+}
+
+/* INPUT */
+.comment-input {
+  flex: 1;
+  padding: 9px 12px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.comment-input:focus {
+  border-color: #ff6600;
+  outline: none;
+}
+
+/* BUTTON */
+.comment-btn {
+  padding: 8px 14px;
+  background: #ff6600;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.comment-btn:hover {
+  background: #e65c00;
+}
