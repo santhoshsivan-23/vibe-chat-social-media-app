@@ -1,15 +1,22 @@
 import "./Profile.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchProfile,
   fetchFriends,
   fetchStories,
   likePost,
-  addComment
+  addComment,
+  uploadStory,
+  deleteStory
 } from "../../slice/profileSlice";
 import PostCard from "./PostCard";
 import StoryCard from "./StoryCard";
+import imageCompression from "browser-image-compression";
+import { showToast } from "../../utils/toast";
+
+const MAX_SIZE_10MB = 10 * 1024 * 1024; // 10MB
+const MAX_SIZE_50MB = 50 * 1024 * 1024; // 50MB
 
 export default function Profile() {
   const userId = localStorage.getItem("userId");
@@ -26,8 +33,11 @@ export default function Profile() {
   const [activeTab, setActiveTab] = useState("posts");
   const [image, setImage] = useState(null);
   const [storyImage, setStoryImage] = useState(null);
+  const [storyMedia, setStoryMedia] = useState(null);
   const [showStoryPopup, setShowStoryPopup] = useState(false);
   const [commentText, setCommentText] = useState("");
+  const [isCompressing, setIsCompressing] = useState(false);
+  const profileFileRef = useRef(null);
 
   // ================= FETCH =================
   useEffect(() => {
@@ -56,6 +66,73 @@ export default function Profile() {
     setCommentText("");
   };
 
+  const handleStoryUpload = () => {
+    if (!storyMedia) return;
+    dispatch(uploadStory({ userId, media: storyMedia }));
+    setStoryMedia(null);
+    setShowStoryPopup(false);
+  };
+
+  const handleDeleteStory = (storyId) => {
+    dispatch(deleteStory(storyId));
+  };
+
+  // ================= COMPRESS MEDIA =================
+  const compressMedia = async (file) => {
+    const isVideo = file.type.startsWith("video/");
+    const fileSize = file.size;
+
+    // If under 10MB, no compression needed
+    if (fileSize <= MAX_SIZE_10MB) {
+      return file;
+    }
+
+    setIsCompressing(true);
+
+    try {
+      if (isVideo) {
+        // For videos > 10MB, we can't compress in browser easily
+        // Show warning and still allow upload (or could implement server-side compression)
+        showToast.warning("Video is larger than 10MB. Upload may take time.");
+        return file;
+      } else {
+        // Compress image
+        const options = {
+          maxSizeMB: 10,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true,
+        };
+        const compressedFile = await imageCompression(file, options);
+        console.log(`Compressed from ${(fileSize / 1024 / 1024).toFixed(2)}MB to ${(compressedFile.size / 1024 / 1024).toFixed(2)}MB`);
+        return compressedFile;
+      }
+    } catch (error) {
+      console.error("Compression error:", error);
+      return file;
+    } finally {
+      setIsCompressing(false);
+    }
+  };
+
+  // ================= HANDLE MEDIA SELECT =================
+  const handleMediaSelect = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const fileSize = file.size;
+
+    // Check if file exceeds 50MB
+    if (fileSize > MAX_SIZE_50MB) {
+      showToast.error("File size exceeds 50MB limit. Please choose a smaller file.");
+      e.target.value = "";
+      return;
+    }
+
+    // Compress if needed
+    const processedFile = await compressMedia(file);
+    setStoryMedia(processedFile);
+  };
+
   // ================= SHARE =================
   const sendPostToFriend = async (post, friendId) => {
     try {
@@ -71,7 +148,7 @@ export default function Profile() {
         })
       });
 
-      alert("Post shared ✅");
+      showToast.success("Post shared ✅");
     } catch (err) {
       console.log(err);
     }
@@ -86,6 +163,9 @@ export default function Profile() {
       <div className="profile-top-section">
 
         <div className="profile-image-section">
+          {/* Mobile-only name above image */}
+          <h2 className="profile-username profile-username-mobile">{user.name}</h2>
+
           <img
             src={
               user.profileImage
@@ -98,13 +178,17 @@ export default function Profile() {
 
           <input
             type="file"
+            ref={profileFileRef}
             className="profile-upload-input"
             onChange={(e) => setImage(e.target.files[0])}
           />
 
           {/* ⚠️ Upload API can stay here OR move to slice */}
-          <button className="profile-upload-btn">
-            Upload
+          <button
+            className="profile-upload-btn"
+            onClick={() => profileFileRef.current.click()}
+          >
+            {image ? "✓ " + image.name.slice(0, 14) + "…" : "Change Photo"}
           </button>
         </div>
 
@@ -127,6 +211,14 @@ export default function Profile() {
 
       {/* ===== TABS ===== */}
       <div className="profile-tabs">
+        {/* Sliding indicator */}
+        <div
+          className="tab-indicator"
+          style={{
+            transform: activeTab === "posts" ? "translateX(0%)" : "translateX(100%)"
+          }}
+        />
+
         <button
           className={`tab-btn ${activeTab === "posts" ? "active-tab" : ""}`}
           onClick={() => setActiveTab("posts")}
@@ -177,7 +269,7 @@ export default function Profile() {
 
             <div className="stories-grid">
               {stories.map((story) => (
-                <StoryCard key={story._id} story={story} />
+                <StoryCard key={story._id} story={story} deleteStory={handleDeleteStory} />
               ))}
             </div>
 
@@ -193,18 +285,34 @@ export default function Profile() {
                 >
                   <h3>Add Story</h3>
 
+                  {isCompressing && <p className="compress-msg">Compressing... ⏳</p>}
+
                   <input
                     type="file"
-                    onChange={(e) => setStoryImage(e.target.files[0])}
+                    accept="image/*,video/*"
+                    onChange={handleMediaSelect}
                   />
 
-                  <button className="upload-btn">
-                    Upload
+                  {storyMedia && (
+                    <p className="file-name">
+                      {storyMedia.name.slice(0, 20)}... ({(storyMedia.size / 1024 / 1024).toFixed(2)}MB)
+                    </p>
+                  )}
+
+                  <button
+                    className="upload-btn"
+                    onClick={handleStoryUpload}
+                    disabled={!storyMedia || isCompressing}
+                  >
+                    {isCompressing ? "Compressing..." : "Upload"}
                   </button>
 
                   <button
                     className="story-cancel-btn"
-                    onClick={() => setShowStoryPopup(false)}
+                    onClick={() => {
+                      setStoryMedia(null);
+                      setShowStoryPopup(false);
+                    }}
                   >
                     Cancel
                   </button>

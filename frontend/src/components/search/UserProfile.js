@@ -7,6 +7,7 @@ import {
   sendFriendRequest,
 } from "../../slice/userSlice";
 import { useParams } from "react-router-dom";
+import { showToast } from "../../utils/toast";
 import "./Search.css";
 
 export default function UserProfile() {
@@ -60,7 +61,7 @@ export default function UserProfile() {
         toUserId: userId,
       })
     );
-    alert("Request sent ✅");
+    showToast.success("Request sent ✅");
   };
 
   if (!user) return <p>Loading...</p>;

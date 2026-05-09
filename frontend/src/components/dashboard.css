@@ -416,6 +416,53 @@ body {
   display: none;
 }
 
+@media (max-width: 768px) {
+  /* Hide desktop sidebar */
+  .sidebar {
+    display: none;
+  }
+
+  /* Full-width main with no left offset, no horizontal scroll */
+  .main {
+    margin-left: 0;
+    width: 100%;
+    max-width: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+
+  /* ===== HEADER MOBILE ===== */
+  .header-inner {
+    padding: 0 14px;
+  }
+
+  .header-left {
+    gap: 4px;
+  }
+
+  .header-logo {
+    height: 38px;
+  }
+
+  .logo {
+    font-size: 16px;
+  }
+
+  .username {
+    font-size: 13px;
+    max-width: 90px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .userSection svg {
+    width: 26px;
+    height: 26px;
+  }
+}
+
 @media (max-width: 426px) {
   /* Hide desktop sidebar */
   .sidebar {
