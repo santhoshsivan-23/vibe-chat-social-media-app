@@ -17,10 +17,19 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith("image/") || file.mimetype.startsWith("video/")) {
+      cb(null, true);
+    } else {
+      cb(new Error("Only image and video files are allowed"), false);
+    }
+  }
+});
 
 // routes
-router.post("/story", upload.single("image"), createStory);
+router.post("/story", upload.single("media"), createStory);
 router.get("/stories/:userId", getStories);
 router.delete("/story/:id", deleteStory);
 
