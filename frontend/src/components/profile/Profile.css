@@ -36,6 +36,11 @@
   gap: 12px;
 }
 
+/* Hide raw file input — triggered via ref */
+.profile-upload-input {
+  display: none;
+}
+
 /* PROFILE IMAGE */
 .profile-image {
   width: 130px;
@@ -87,6 +92,11 @@
   font-size: 26px;
   font-weight: 600;
   color: #9a3412;
+}
+
+/* Mobile-only duplicate name — hidden on desktop */
+.profile-username-mobile {
+  display: none;
 }
 
 /* USER ID */
@@ -166,9 +176,22 @@
 /* ===== TABS ===== */
 .profile-tabs {
   display: flex;
+  position: relative;
   width: 100%;
   margin-top: 20px;
   border-bottom: 1px solid #fed7aa;
+}
+
+/* Sliding indicator */
+.tab-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50%;
+  height: 3px;
+  background: #f97316;
+  border-radius: 3px 3px 0 0;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .tab-btn {
@@ -182,13 +205,21 @@
   transition: all 0.3s ease;
 }
 
-.tab-btn:hover {
-  background: #fff7ed;
+.tab-btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 500;
+  color: #9a3412;
+  transition: color 0.3s ease;
+  position: relative;
+  z-index: 1;
 }
 
 /* ACTIVE TAB */
 .active-tab {
-  border-bottom: 3px solid #f97316;
   font-weight: bold;
   color: #f97316;
 }
@@ -461,6 +492,20 @@
   margin: 0;
 }
 
+.compress-msg {
+  text-align: center;
+  color: #f97316;
+  font-size: 14px;
+  margin: 0;
+}
+
+.file-name {
+  text-align: center;
+  font-size: 12px;
+  color: #78716c;
+  margin: 0;
+}
+
 .story-upload-label {
   display: block;
   padding: 12px;
@@ -520,6 +565,12 @@
 
 .story-popup-actions .upload-btn:disabled {
   background: #d1d5db;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.upload-btn:disabled {
+  background: #d1d5db !important;
   cursor: not-allowed;
   transform: none;
 }
@@ -865,4 +916,202 @@
 
 .send-btn:hover {
   background: #ea580c;
+}
+
+/* ===================================================
+   MOBILE RESPONSIVE — max-width: 768px
+=================================================== */
+@media (max-width: 768px) {
+
+  /* Show name above image, hide it inside info section */
+  .profile-username-mobile {
+    display: block;
+    font-size: 18px;
+    font-weight: 600;
+    color: #9a3412;
+    margin: 0;
+  }
+
+  .profile-info-section .profile-username {
+    display: none;
+  }
+
+  /* Hide @userId */
+  .profile-userid {
+    display: none;
+  }
+
+  /* No extra padding — .main already provides it. Clamp to viewport width */
+  .profile-page {
+    padding: 0;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+
+  /* Full-width, no auto side margins */
+  .profile-content {
+    max-width: 100%;
+    width: 100%;
+    margin: 12px 0;
+    box-sizing: border-box;
+  }
+
+  /* TOP SECTION — stack vertically, centered */
+  .profile-top-section {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    gap: 16px;
+    padding: 16px;
+    min-height: unset;
+    box-sizing: border-box;
+  }
+
+  /* IMAGE SECTION */
+  .profile-image-section {
+    width: 100%;
+    align-items: center;
+  }
+
+  /* INFO SECTION */
+  .profile-info-section {
+    width: 100%;
+    align-items: center;
+  }
+
+  /* NAME */
+  .profile-username {
+    font-size: 20px;
+  }
+
+  /* DESCRIPTION — constrained to parent */
+  .profile-description {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* SAVE BUTTON — full width */
+  .profile-save-btn {
+    width: 100%;
+  }
+
+  /* UPLOAD BTN — 50% width, left aligned */
+  .profile-upload-btn {
+    width: 50%;
+    justify-content: center;
+    margin-right: auto;
+  }
+
+  /* TABS */
+  .tab-btn {
+    padding: 10px 6px;
+    font-size: 13px;
+  }
+
+  /* GRIDS — 2 columns */
+  .posts-grid,
+  .stories-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* POST / STORY CARD — don't overflow */
+  .post-card-container,
+  .story-card-container {
+    width: 100%;
+    box-sizing: border-box;
+    min-width: 0;
+  }
+
+  /* POST CARD IMAGE */
+  .post-card-image {
+    height: 130px;
+  }
+
+  /* STORY IMAGE */
+  .story-card-image {
+    height: 130px;
+  }
+
+  /* CREATE STORY SECTION */
+  .create-story-section {
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: center;
+  }
+
+  /* STORY UPLOAD POPUP */
+  .story-upload-popup {
+    width: 92%;
+    padding: 18px;
+    box-sizing: border-box;
+  }
+
+  /* COMMENT POPUP */
+  .comment-popup {
+    flex-direction: column;
+    width: 95%;
+    height: 90vh;
+    overflow-y: auto;
+  }
+
+  .popup-left,
+  .popup-right {
+    width: 100%;
+  }
+
+  .popup-left img {
+    height: 200px;
+    object-fit: cover;
+  }
+
+  /* SHARE POPUP */
+  .share-popup {
+    width: 92%;
+    box-sizing: border-box;
+  }
+}
+
+/* ===================================================
+   SMALL MOBILE — max-width: 480px
+=================================================== */
+@media (max-width: 480px) {
+
+  /* GRIDS — single column */
+  .posts-grid,
+  .stories-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* IMAGE SIZE */
+  .profile-image {
+    width: 100px;
+    height: 100px;
+  }
+
+  /* USERNAME */
+  .profile-username {
+    font-size: 18px;
+  }
+
+  /* CONTENT */
+  .profile-content {
+    margin: 10px 0;
+  }
+
+  /* COMMENT POPUP */
+  .popup-left img {
+    height: 160px;
+  }
+
+  /* COMMENT INPUT */
+  .comment-input-box input {
+    font-size: 13px;
+  }
 }

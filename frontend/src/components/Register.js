@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../slice/authSlice";
 import { useNavigate } from "react-router-dom";
+import { showToast } from "../utils/toast";
 import {
   FaUser,
   FaEnvelope,
@@ -33,7 +34,7 @@ export default function Register() {
     const result = await dispatch(registerUser(form));
 
     if (registerUser.fulfilled.match(result)) {
-      alert("Registered successfully ✅");
+      showToast.success("Registered successfully ✅");
       navigate("/");
     }
   };

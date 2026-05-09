@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { showToast } from "../utils/toast";
 
 // ================= LOGIN =================
 export const loginUser = createAsyncThunk(
@@ -82,6 +83,7 @@ const authSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        showToast.error(action.payload || "Login failed");
       })
 
       // ===== REGISTER =====
@@ -95,6 +97,7 @@ const authSlice = createSlice({
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        showToast.error(action.payload || "Registration failed");
       });
   },
 });

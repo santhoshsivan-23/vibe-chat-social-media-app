@@ -74,11 +74,19 @@ export default function Story() {
                 setCurrentIndex(0);
               }}
             >
-              <img
-                className="story-bg"
-                src={`http://localhost:5000/${firstStory.image}`}
-                alt=""
-              />
+              {firstStory.type === "video" ? (
+                <video
+                  className="story-bg"
+                  src={`http://localhost:5000/${firstStory.image}`}
+                  alt=""
+                />
+              ) : (
+                <img
+                  className="story-bg"
+                  src={`http://localhost:5000/${firstStory.image}`}
+                  alt=""
+                />
+              )}
 
               <div className="story-user-info">
                 {firstStory.profileImage ? (
@@ -122,12 +130,20 @@ export default function Story() {
               />
               <div className="click-right" onClick={nextStory} />
 
-              <img
-                src={`http://localhost:5000/${
-                  groupedStories[activeUser][currentIndex].image
-                }`}
-                alt=""
-              />
+              {groupedStories[activeUser][currentIndex].type === "video" ? (
+                <video
+                  src={`http://localhost:5000/${groupedStories[activeUser][currentIndex].image}`}
+                  alt=""
+                  autoPlay
+                  muted
+                  controls
+                />
+              ) : (
+                <img
+                  src={`http://localhost:5000/${groupedStories[activeUser][currentIndex].image}`}
+                  alt=""
+                />
+              )}
             </div>
           </div>
         </div>

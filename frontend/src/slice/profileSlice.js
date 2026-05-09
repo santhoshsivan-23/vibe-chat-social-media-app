@@ -28,6 +28,34 @@ export const fetchStories = createAsyncThunk(
   }
 );
 
+// ================= DELETE STORY =================
+export const deleteStory = createAsyncThunk(
+  "profile/deleteStory",
+  async (storyId) => {
+    const userId = localStorage.getItem("userId");
+    await axios.delete(`http://localhost:5000/api/story/${storyId}`, {
+      data: { userId }
+    });
+    return storyId;
+  }
+);
+
+// ================= UPLOAD STORY =================
+export const uploadStory = createAsyncThunk(
+  "profile/uploadStory",
+  async ({ userId, media }) => {
+    const formData = new FormData();
+    formData.append("userId", userId);
+    formData.append("media", media);
+    const res = await axios.post(
+      "http://localhost:5000/api/story",
+      formData,
+      { headers: { "Content-Type": "multipart/form-data" } }
+    );
+    return res.data;
+  }
+);
+
 // ================= LIKE =================
 export const likePost = createAsyncThunk(
   "profile/likePost",
@@ -85,6 +113,12 @@ const profileSlice = createSlice({
         state.posts = state.posts.map(p =>
           p._id === action.payload._id ? action.payload : p
         );
+      })
+      .addCase(uploadStory.fulfilled, (state, action) => {
+        state.stories.push(action.payload);
+      })
+      .addCase(deleteStory.fulfilled, (state, action) => {
+        state.stories = state.stories.filter(s => s._id !== action.payload);
       });
   },
 });
