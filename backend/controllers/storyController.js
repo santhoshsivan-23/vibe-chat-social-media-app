@@ -7,11 +7,14 @@ exports.createStory = async (req, res) => {
   try {
     const { userId } = req.body;
 
-    if (!req.file) return res.status(400).json({ message: "Image is required" });
+    if (!req.file) return res.status(400).json({ message: "Media file is required" });
+
+    const fileType = req.file.mimetype.startsWith("video/") ? "video" : "image";
 
     const story = await Story.create({
       userId,
-      image: req.file.path
+      image: req.file.path,
+      type: fileType
     });
 
     res.json(story);
@@ -60,6 +63,7 @@ exports.getStories = async (req, res) => {
       $project: {
         userId: 1,
         image: 1,
+        type: 1,
         createdAt: 1,
         profileImage: "$user.profileImage",
         name: "$user.name"
@@ -77,7 +81,7 @@ exports.getStories = async (req, res) => {
 exports.deleteStory = async (req, res) => {
   try {
     const { id } = req.params;
-    const { userId } = req.body;
+    const userId = req.body?.userId;
 
     const story = await Story.findById(id);
 
@@ -85,7 +89,7 @@ exports.deleteStory = async (req, res) => {
       return res.status(404).json({ message: "Story not found ❌" });
     }
 
-    if (story.userId !== userId) {
+    if (userId && story.userId !== userId) {
       return res.status(403).json({ message: "Unauthorized ❌" });
     }
 

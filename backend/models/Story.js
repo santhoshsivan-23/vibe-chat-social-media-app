@@ -5,6 +5,12 @@ const storySchema = new mongoose.Schema({
 
   image: String,
 
+  type: {
+    type: String,
+    enum: ["image", "video"],
+    default: "image"
+  },
+
   createdAt: {
     type: Date,
     default: Date.now,
